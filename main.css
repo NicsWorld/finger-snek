@@ -1,0 +1,15 @@
+#container {
+    position: relative;
+    width: 640px; /* Match the width of the video and canvas */
+    height: 480px; /* Match the height of the video and canvas */
+}
+
+#video, #canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+canvas {
+    pointer-events: none; /* Makes the canvas click-through */
+}
