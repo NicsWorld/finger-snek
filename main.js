@@ -20,26 +20,50 @@ async function detectHands(model, video, canvas) {
   const ctx = canvas.getContext("2d");
   canvas.width = video.width;
   canvas.height = video.height;
+  const history = [];
 
   async function frameLandmarks() {
-    console.log("frameLandmarks");
     const predictions = await model.estimateHands(video);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (predictions.length > 0) {
       for (let i = 0; i < predictions.length; i++) {
         const landmarks = predictions[i].landmarks;
-        console.log(landmarks);
-        // Draw landmarks
-        for (let j = 0; j < landmarks.length; j++) {
-          const [x, y, z] = landmarks[j];
+        history.push(landmarks[8]);
+
+        if (history.length > 10) {
+          history.shift();
+        }
+        // Draw the tail
+        for (let j = 0; j < history.length; j++) {
+          const [x, y, z] = history[j];
           ctx.beginPath();
-          ctx.arc(x, y, 5, 0, 3 * Math.PI);
-          ctx.fillStyle = "aqua";
+          ctx.arc(x, y, 15 * (1 - j / 10), 0, 3 * Math.PI); // Decreasing size
+          ctx.fillStyle = `rgba(0, 255, 255, ${1 - j / 10})`; // Decreasing opacity
           ctx.fill();
         }
+        // Draw only the tip of the pointer finger
+        const [x, y, z] = landmarks[8]; // Index 8 for the tip of the pointer finger
+        ctx.beginPath();
+        ctx.arc(x, y, 15, 0, 3 * Math.PI);
+        ctx.fillStyle = "aqua";
+        ctx.fill();
       }
     }
+    // if (predictions.length > 0) {
+    //   for (let i = 0; i < predictions.length; i++) {
+    //     const landmarks = predictions[i].landmarks;
+
+    //     // Draw landmarks
+    //     for (let j = 0; j < landmarks.length; j++) {
+    //       const [x, y, z] = landmarks[j];
+    //       ctx.beginPath();
+    //       ctx.arc(x, y, 5, 0, 3 * Math.PI);
+    //       ctx.fillStyle = "aqua";
+    //       ctx.fill();
+    //     }
+    //   }
+    // }
     requestAnimationFrame(frameLandmarks);
   }
 
