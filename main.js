@@ -50,6 +50,7 @@ async function detectHands(model, video, canvas) {
         ctx.fill();
       }
     }
+    // full hand
     // if (predictions.length > 0) {
     //   for (let i = 0; i < predictions.length; i++) {
     //     const landmarks = predictions[i].landmarks;
