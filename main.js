@@ -1,3 +1,5 @@
+// CONTRIBUTION FROM HANNAH - SNIC
+
 async function setupCamera() {
   const video = document.getElementById("video");
   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -31,16 +33,28 @@ async function detectHands(model, video, canvas) {
         const landmarks = predictions[i].landmarks;
         history.push(landmarks[8]);
 
-        if (history.length > 10) {
+        if (history.length > 20) {
           history.shift();
         }
         // Draw the tail
-        for (let j = 0; j < history.length; j++) {
-          const [x, y, z] = history[j];
-          ctx.beginPath();
-          ctx.arc(x, y, 15 * (1 - j / 10), 0, 3 * Math.PI); // Decreasing size
-          ctx.fillStyle = `rgba(0, 255, 255, ${1 - j / 10})`; // Decreasing opacity
-          ctx.fill();
+        // Start the path for the tail
+        ctx.beginPath();
+
+        // Check if history has points
+        if (history.length > 0) {
+          // Move to the first point in the history
+          ctx.moveTo(history[0][0], history[0][1]);
+
+          for (let j = 1; j < history.length; j++) {
+            const [x, y, z] = history[j];
+            // Draw a line to the next point
+            ctx.lineTo(x, y);
+          }
+
+          // Set the style of the tail
+          ctx.strokeStyle = "rgba(0, 255, 255, 0.5)"; // Semi-transparent cyan
+          ctx.lineWidth = 15; // Adjust as needed
+          ctx.stroke(); // Apply the line drawing
         }
         // Draw only the tip of the pointer finger
         const [x, y, z] = landmarks[8]; // Index 8 for the tip of the pointer finger
