@@ -20,8 +20,8 @@ async function loadModel() {
 async function detectHands(model, video, canvas) {
   console.log("detecting hands");
   const ctx = canvas.getContext("2d");
-  canvas.width = video.width;
-  canvas.height = video.height;
+  // canvas.width = video.width;
+  // canvas.height = video.height;
   const history = [];
 
   async function frameLandmarks() {

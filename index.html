@@ -4,8 +4,12 @@
     <title>Handpose Example</title>
 </head>
 <body>
-    <video id="video" width="640" height="480" autoplay></video>
-    <canvas id="canvas" width="640" height="480"></canvas>
+    <!-- full width, full height -->
+    <div class="screen-wrapper">
+        <video className="full" id="video" width="640" height="480" autoplay></video>
+        <canvas className="full" id="canvas" width="640" height="480"></canvas>
+    </div>
+
     <link rel="stylesheet" href="main.css">
 
     <script src="main.js"></script>
